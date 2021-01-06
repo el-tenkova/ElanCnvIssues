@@ -50,7 +50,15 @@ class ElanCnvConf:
                 elif key in ElanCnvConf.tiers:
                     self.config['tiers'][key] = value
                 elif key in ElanCnvConf.columns:
-                    self.config['columns'][key] = value
+                    if key == 'src':
+                        langs = value.split(',')
+                        if len(langs) > 0:
+                             self.config['columns']['src'] = []
+                        for lang in langs:
+                            lang = lang.strip()
+                            self.config['columns']['src'].append(lang)
+                    else:
+                        self.config['columns'][key] = value
 
     def setDefault(self):
         # названия слоёв
@@ -67,7 +75,7 @@ class ElanCnvConf:
         self.config['tiers'][ElanCnvConf.Eng_Homonyms] = 'Gloss-txt-en'
         self.config['tiers'][ElanCnvConf.Rus_Sent] = 'Translation-gls-rus'
         # название колонок входного файла
-        self.config['columns']['src'] = 'src'
+        self.config['columns']['src'] = ['src']
         self.config['columns']['rus'] = 'rus'
         self.config['columns']['time'] = 'time'
         self.config['columns']['name'] = 'name'
@@ -99,6 +107,9 @@ class ElanCnvConf:
                 for name in self.config['columns']:
                     if self.config['columns'][name] == part:
                         titles[idx] = name
+                    elif name == 'src':
+                        if part in self.config['columns']['src']:
+                             titles[idx] = name
                 idx = idx + 1
         return titles
 

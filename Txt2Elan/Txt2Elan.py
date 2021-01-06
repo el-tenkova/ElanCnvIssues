@@ -1,5 +1,6 @@
+import os.path
 import sys
-sys.path.append('../')
+sys.path.append(os.path.join(os.path.dirname( __file__ ), '..'))
 import fileinput
 from getopt import getopt
 from ElanUtils.elan_save import ElanCnvSave
