@@ -52,8 +52,16 @@ def main(args):
     delim = config.getDelimeter()
     if withTitle:
         titles = config.getTitlesDic(lines[0])
-        print (titles)
+        ok = False
+        for idx in titles:
+            if titles[idx] == 'src':
+                ok = True
+                break
+        if ok == False:
+            print ("Error: cannot find SRC column")
+            exit()
         start = 1
+        print (titles)
     else:
         col_num = 0
         for idx in range(start, numLine):
@@ -63,6 +71,10 @@ def main(args):
             parts = line.split(delim)
             if len(parts) > col_num:
                 col_num = len(parts)
+        if col_num > 3:
+            print ("Error: too much columns, add title line")
+            exit()
+
         titles = config.getDefaultTitlesDic(col_num)
     if not "name" in titles:
         ElanCnvSave.names[""] = 1

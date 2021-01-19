@@ -39,6 +39,8 @@ class ElanCnvConf:
         self.setDefault()
         if len(conffile) > 0:
             for line in fileinput.input(conffile):
+                if line.startswith('#'):
+                    continue
                 line = line.rstrip()
                 parts = line.split(":")
                 if len(parts) != 2:
@@ -55,7 +57,7 @@ class ElanCnvConf:
                         if len(langs) > 0:
                              self.config['columns']['src'] = []
                         for lang in langs:
-                            lang = lang.strip()
+                            lang = lang.lower().strip()
                             self.config['columns']['src'].append(lang)
                     else:
                         self.config['columns'][key] = value
@@ -105,10 +107,11 @@ class ElanCnvConf:
                 if not len(part):
                     continue
                 for name in self.config['columns']:
-                    if self.config['columns'][name] == part:
+                    partLwr = part.lower()
+                    if self.config['columns'][name] == partLwr:
                         titles[idx] = name
                     elif name == 'src':
-                        if part in self.config['columns']['src']:
+                        if partLwr in self.config['columns']['src']:
                              titles[idx] = name
                 idx = idx + 1
         return titles
@@ -131,3 +134,4 @@ class ElanCnvConf:
 
     def getParserRequest(self):
         return self.config['parameters']['request']
+    
